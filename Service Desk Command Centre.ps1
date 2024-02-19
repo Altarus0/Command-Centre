@@ -57,7 +57,7 @@ $main_form.Controls.Add($Button2)
 $Button3 = New-Object System.Windows.Forms.Button
 $Button3.Location = New-Object System.Drawing.Size(10,120)
 $Button3.Size = New-Object System.Drawing.Size(200,70)
-$Button3.Text = "Find Computer Bitlocker Recovery Password"
+$Button3.Text = "Find Computer Status and Bitlocker Password"
 $Button3.Font = [System.Drawing.Font]::new('Segoe UI', 10, [System.Drawing.FontStyle]::Bold)
 $Button3.backcolor = 'White'
 $Button3.FlatStyle = 'Flat'
