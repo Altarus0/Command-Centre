@@ -8,6 +8,10 @@
         a specific user to update, if their AD account was not
         showing their latest photo.
 
+
+        Sources the string data from the ThumbnailPhoto attribute
+        of the AD user and pushes the data onto Azure AD.
+
         Version 1.1
         - Added refresh on label3.text to show pending sign.
         - Added function to hide powershell
