@@ -30,7 +30,7 @@ Add-Type -assembly System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
 # variables
-$Logfile = "\\file.gt.local\users$\Adrian.Chow\Code\Logs\UpdateProfilePictures.log"
+$Logfile = ".\Code\Logs\UpdateProfilePictures.log"
 
 #hiding powershell
 
@@ -64,7 +64,7 @@ Hide-Powershell
 $main_form = New-Object System.Windows.Forms.Form
 $main_form.Text ='Username for Photo Update'
 $main_form.Width = 405
-$main_form.Height = 205
+$main_form.Height = 305
 $main_form.AutoSize = $true
 $main_form.MaximizeBox = $false;
 $main_form.StartPosition = 'CenterScreen'
@@ -103,9 +103,17 @@ $Label3.AutoSize = $true
 $Label3.Font = [System.Drawing.Font]::new('Segoe UI', 10)
 $main_form.Controls.Add($Label3)
 
+# Picture view 
+$Picture = New-Object System.Windwos.Forms.Bitmap
+$Picture = New-Object System.Windows.Forms.Button
+$Picture.Location = New-Object System.Drawing.Size(15,120)
+$Picture.Size = New-Object System.Drawing.Size(100,100)
+$main_form.Controls.Add($Picture)
+
+
 # update button
 $Button = New-Object System.Windows.Forms.Button
-$Button.Location = New-Object System.Drawing.Size(275,120)
+$Button.Location = New-Object System.Drawing.Size(275,220)
 $Button.Size = New-Object System.Drawing.Size(100,33)
 $Button.Text = "Update"
 $Button.Font = [System.Drawing.Font]::new('Segoe UI', 10, [System.Drawing.FontStyle]::Bold)
@@ -113,6 +121,15 @@ $Button.backcolor = 'White'
 $Button.FlatStyle = 'Flat'
 $main_form.Controls.Add($Button)
 
+
+$ComboBox.add_SelectedIndexChanged({
+    $user = $ComboBox.selectedItem
+    $main_form.Controls.Add($Picture)
+    $Picture.data = $null
+    $Picture.refresh()
+    $Picture.data = Get-UserPhoto -Identity $user -PictureData (Get-ADUser $user -Properties thumbnailPhoto).thumbnailPhoto -Confirm:$false
+    $Picture.refresh()
+})
 
 $Button.Add_Click( {
     $user = $ComboBox.selectedItem
