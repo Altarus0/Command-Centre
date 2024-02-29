@@ -26,11 +26,11 @@
 #>
 
 
-Add-Type -assembly System.Windows.Forms
+Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
 # variables
-$Logfile = ".\Code\Logs\UpdateProfilePictures.log"
+$Logfile = ".\Logs\UpdateProfilePictures.log"
 
 #hiding powershell
 
@@ -104,12 +104,23 @@ $Label3.Font = [System.Drawing.Font]::new('Segoe UI', 10)
 $main_form.Controls.Add($Label3)
 
 # Picture view 
-$Picture = New-Object System.Windwos.Forms.Bitmap
-$Picture = New-Object System.Windows.Forms.Button
-$Picture.Location = New-Object System.Drawing.Size(15,120)
-$Picture.Size = New-Object System.Drawing.Size(100,100)
-$main_form.Controls.Add($Picture)
+$Pictureborder = New-Object System.Windows.Forms.PictureBox
+$Pictureborder.Location = New-Object System.Drawing.Size(13,98)
+$Pictureborder.Size = New-Object System.Drawing.Size(124,124)
+$Pictureborder.backcolor = 'Black'
+$Picture = New-Object System.Windows.Forms.PictureBox
+$Picture.Location = New-Object System.Drawing.Size(15,100)
+$Picture.Size = New-Object System.Drawing.Size(120,120)
+$Picture.backcolor = 'White'
+$Picture.SizeMode = [System.Windows.Forms.PictureBoxSizeMode]::StretchImage
 
+
+
+$CurrentPhotoLabel = New-Object System.Windows.Forms.Label
+$CurrentPhotoLabel.Text = "Current AD Photo"
+$CurrentPhotoLabel.Location  = New-Object System.Drawing.Point(21,225)
+$CurrentPhotoLabel.AutoSize = $true
+$CurrentPhotoLabel.Font = [System.Drawing.Font]::new('Segoe UI', 10)
 
 # update button
 $Button = New-Object System.Windows.Forms.Button
@@ -123,11 +134,13 @@ $main_form.Controls.Add($Button)
 
 
 $ComboBox.add_SelectedIndexChanged({
-    $user = $ComboBox.selectedItem
     $main_form.Controls.Add($Picture)
-    $Picture.data = $null
-    $Picture.refresh()
-    $Picture.data = Get-UserPhoto -Identity $user -PictureData (Get-ADUser $user -Properties thumbnailPhoto).thumbnailPhoto -Confirm:$false
+    $main_form.Controls.Add($Pictureborder)
+    $main_form.Controls.Add($CurrentPhotoLabel)
+    $Picture.BackgroundImage = $null
+    $user = $ComboBox.selectedItem
+    $userphoto = Get-ADUser $user -Properties thumbnailPhoto
+    $Picture.Image = $userphoto.thumbnailPhoto
     $Picture.refresh()
 })
 
@@ -137,7 +150,7 @@ $Button.Add_Click( {
     $Button.Enabled = $false
     $Label3.Refresh();
     if ($User -ne $null) {
-    Set-UserPhoto -Identity $user -PictureData (Get-ADUser $user -Properties thumbnailPhoto).thumbnailPhoto -Confirm:$false
+        Set-UserPhoto -Identity $user -PictureData(Get-ADUser $user -Properties thumbnailPhoto).thumbnailPhoto -Confirm:$false
     $Label3.Text = $comboBox.selectedItem + " has been successfully updated."
     WriteLog "The profile picture has been updated for"
     WriteLog $user
