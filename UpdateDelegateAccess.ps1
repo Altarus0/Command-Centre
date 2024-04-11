@@ -59,7 +59,6 @@ function WriteLog
     Add-content $LogFile -value $LogMessage
 }
 
-Connect-ExchangeOnline
 Hide-Powershell
 
 # creating window
@@ -116,10 +115,10 @@ $main_form.Controls.Add($TextBox2)
 # checkbox for invite forwarding
 $checkBox1 = New-Object System.Windows.Forms.CheckBox
 $checkBox1.Location = New-Object System.Drawing.Point(10,130)
-$checkBox1.Size = New-Object System.Drawing.Size(170,20)
-$checkBox1.Text = "Can View Private Items?"
+$checkBox1.Size = New-Object System.Drawing.Size(400,20)
+$checkBox1.Text = "Can View Private Items? (This will remove access for user to accept invitiation)"
 $checkBox1.CheckAlign = 'MiddleLeft'
-$checkBox1.Font = [System.Drawing.Font]::new('Segoe UI', 10)
+$checkBox1.Font = [System.Drawing.Font]::new('Segoe UI', 8)
 $main_form.Controls.Add($checkBox1)
 
 # window text below the text box
